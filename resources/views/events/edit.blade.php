@@ -26,7 +26,11 @@
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label" for="start_date">Start Date & Time *</label>
-                    <input type="datetime-local" id="start_date" name="start_date" class="form-input" value="{{ old('start_date', $event->start_date->format('Y-m-d\TH:i')) }}" required>
+                    <p style="font-size:0.75rem;color:var(--text-muted);margin-bottom:0.25rem;">Min. 7 days from now (if changed)</p>
+                    <input type="datetime-local" id="start_date" name="start_date" class="form-input" 
+                        value="{{ old('start_date', $event->start_date->format('Y-m-d\TH:i')) }}" 
+                        min="{{ now()->addDays(7)->format('Y-m-d\TH:i') }}"
+                        required>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="end_date">End Date & Time *</label>
@@ -47,9 +51,18 @@
 
             <div class="form-group">
                 <label class="form-label" for="status">Status *</label>
+                <p style="font-size:0.75rem;color:var(--text-muted);margin-bottom:0.25rem;">Cancellation allowed until: {{ $event->start_date->copy()->subDay()->format('d M Y, H:i') }} (H-1)</p>
                 <select id="status" name="status" class="form-input">
-                    @foreach(['draft','published','ongoing','completed','cancelled'] as $s)
-                    <option value="{{ $s }}" {{ old('status', $event->status) === $s ? 'selected' : '' }}>{{ ucfirst($s) }}</option>
+                    @foreach(['draft','pending_approval','approved','published','ongoing','completed','cancelled'] as $s)
+                        @php
+                            $isDisabled = false;
+                            if ($s === 'cancelled' && $event->status !== 'cancelled') {
+                                $isDisabled = now()->gt($event->start_date->copy()->subDay());
+                            }
+                        @endphp
+                        <option value="{{ $s }}" {{ old('status', $event->status) === $s ? 'selected' : '' }} {{ $isDisabled ? 'disabled' : '' }}>
+                            {{ ucfirst(str_replace('_', ' ', $s)) }} {{ $isDisabled ? '(Not allowed)' : '' }}
+                        </option>
                     @endforeach
                 </select>
             </div>

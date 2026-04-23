@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Services\NotificationService;
+use App\Helpers\AuditHelper;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
@@ -34,7 +36,17 @@ class EventController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'start_date' => 'required|date|after:now',
+            'start_date' => [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) {
+                    $date = Carbon::parse($value);
+                    $minDate = Carbon::now()->addDays(7);
+                    if ($date->lt($minDate)) {
+                        $fail('Event must be scheduled at least 7 days in advance.');
+                    }
+                },
+            ],
             'end_date' => 'required|date|after:start_date',
             'location' => 'required|string|max:255',
             'quota' => 'required|integer|min:1',
@@ -46,6 +58,8 @@ class EventController extends Controller
 
         $validated['created_by'] = auth()->id();
         $event = Event::create($validated);
+
+        AuditHelper::log('create', $event, null, $event->toArray());
 
         if ($request->has('materials')) {
             foreach ($request->materials as $material) {
@@ -87,15 +101,43 @@ class EventController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'start_date' => 'required|date',
+            'start_date' => [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) use ($event) {
+                    $date = Carbon::parse($value);
+                    // Only enforce 7-day rule if start_date is being changed
+                    if ($event->start_date->ne($date)) {
+                        $minDate = Carbon::now()->addDays(7);
+                        if ($date->lt($minDate)) {
+                            $fail('Event must be scheduled at least 7 days in advance.');
+                        }
+                    }
+                },
+            ],
             'end_date' => 'required|date|after:start_date',
             'location' => 'required|string|max:255',
             'quota' => 'required|integer|min:1',
-            'status' => 'required|in:draft,pending_approval,approved,published,ongoing,completed,cancelled',
+            'status' => [
+                'required',
+                'in:draft,pending_approval,approved,published,ongoing,completed,cancelled',
+                function ($attribute, $value, $fail) use ($event) {
+                    if ($value === 'cancelled' && $event->status !== 'cancelled') {
+                        $maxCancelDate = $event->start_date->copy()->subDay();
+                        if (Carbon::now()->gt($maxCancelDate)) {
+                            $fail('Event can only be cancelled at least 1 day before the event date.');
+                        }
+                    }
+                },
+            ],
         ]);
 
+        $oldData = $event->toArray();
         $wasNotPublished = $event->status !== 'published';
         $event->update($validated);
+
+        $action = $validated['status'] === 'cancelled' && $oldData['status'] !== 'cancelled' ? 'cancel' : 'update';
+        AuditHelper::log($action, $event, $oldData, $event->toArray());
 
         if ($wasNotPublished && $event->status === 'published') {
             NotificationService::notifyEventPublished($event);
@@ -108,7 +150,9 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
         $this->authorizeEvent($event);
+        $oldData = $event->toArray();
         $event->delete();
+        AuditHelper::log('delete', $event, $oldData, null);
         return redirect()->route('events.index')
             ->with('success', 'Event deleted successfully!');
     }

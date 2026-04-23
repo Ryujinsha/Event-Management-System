@@ -770,6 +770,12 @@ textarea.form-input { resize: vertical; min-height: 120px; }
 .badge-rejected { background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
 .badge-available { background: rgba(99, 102, 241, 0.15); color: #a5b4fc; }
 .badge-certificate_available { background: rgba(168, 85, 247, 0.15); color: #c4b5fd; }
+.badge-admin { background: rgba(99, 102, 241, 0.15); color: #a5b4fc; }
+.badge-committee { background: rgba(168, 85, 247, 0.15); color: #c4b5fd; }
+.badge-create, .badge-create_user { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; }
+.badge-update, .badge-update_user { background: rgba(59, 130, 246, 0.15); color: #93c5fd; }
+.badge-delete, .badge-cancel { background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
+.badge-toggle_user_status { background: rgba(245, 158, 11, 0.15); color: #fcd34d; }
 
 /* ═══════════ TABLE ═══════════ */
 .table-container {

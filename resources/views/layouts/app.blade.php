@@ -59,6 +59,16 @@
                 <div class="nav-divider">
                     <span>Management</span>
                 </div>
+                @if(auth()->user()->isAdmin())
+                <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                    <i class="fas fa-users"></i>
+                    <span>Manage Users</span>
+                </a>
+                <a href="{{ route('admin.audit-logs.index') }}" class="nav-link {{ request()->routeIs('admin.audit-logs.*') ? 'active' : '' }}">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Audit Logs</span>
+                </a>
+                @endif
                 <a href="{{ route('events.create') }}" class="nav-link {{ request()->routeIs('events.create') ? 'active' : '' }}">
                     <i class="fas fa-plus-circle"></i>
                     <span>Create Event</span>

@@ -26,7 +26,11 @@
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label" for="start_date">Start Date & Time *</label>
-                    <input type="datetime-local" id="start_date" name="start_date" class="form-input" value="{{ old('start_date') }}" required>
+                    <p style="font-size:0.75rem;color:var(--text-muted);margin-bottom:0.25rem;">Min. 7 days from now</p>
+                    <input type="datetime-local" id="start_date" name="start_date" class="form-input" 
+                        value="{{ old('start_date') }}" 
+                        min="{{ now()->addDays(7)->format('Y-m-d\TH:i') }}"
+                        required>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="end_date">End Date & Time *</label>
