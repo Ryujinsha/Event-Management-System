@@ -3,7 +3,7 @@
 
 @section('content')
 <div style="margin-bottom:1.5rem;">
-    <a href="{{ route('trainings.show', $training) }}" class="link"><i class="fas fa-arrow-left"></i> Back to {{ $training->title }}</a>
+    <a href="{{ route('events.show', $event) }}" class="link"><i class="fas fa-arrow-left"></i> Back to {{ $event->title }}</a>
 </div>
 
 <div class="card" style="max-width:720px;">
@@ -13,8 +13,8 @@
     <div class="card-body">
         <div class="detail-grid mb-3">
             <div class="detail-item">
-                <div class="detail-label">Training</div>
-                <div class="detail-value">{{ $training->title }}</div>
+                <div class="detail-label">Event</div>
+                <div class="detail-value">{{ $event->title }}</div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Total Registered</div>
@@ -30,11 +30,11 @@
             </div>
         </div>
 
-        <form method="POST" action="{{ route('reports.store', $training) }}">
+        <form method="POST" action="{{ route('reports.store', $event) }}">
             @csrf
             <div class="form-group">
                 <label class="form-label">Report Title *</label>
-                <input type="text" name="title" class="form-input" value="{{ old('title', 'Training Report — ' . $training->title) }}" required>
+                <input type="text" name="title" class="form-input" value="{{ old('title', 'Event Report — ' . $event->title) }}" required>
             </div>
             <div class="form-group">
                 <label class="form-label">Report Content *</label>

@@ -12,12 +12,12 @@ return new class extends Migration
             $table->id();
             $table->string('certificate_number')->unique();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('training_id')->constrained('trainings')->cascadeOnDelete();
+            $table->foreignId('event_id')->constrained('events')->cascadeOnDelete();
             $table->enum('status', ['pending', 'available'])->default('pending');
             $table->string('file_path')->nullable();
             $table->timestamps();
 
-            $table->unique(['user_id', 'training_id']);
+            $table->unique(['user_id', 'event_id']);
         });
     }
 

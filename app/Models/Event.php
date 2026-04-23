@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Training extends Model
+class Event extends Model
 {
     protected $fillable = [
         'title', 'description', 'start_date', 'end_date',
@@ -28,9 +28,9 @@ class Training extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function registrations(): HasMany
+    public function participants(): HasMany
     {
-        return $this->hasMany(Registration::class);
+        return $this->hasMany(Participant::class);
     }
 
     public function attendances(): HasMany
@@ -48,14 +48,34 @@ class Training extends Model
         return $this->hasMany(Certificate::class);
     }
 
-    public function acceptedRegistrations(): HasMany
+    public function approvals(): HasMany
     {
-        return $this->hasMany(Registration::class)->where('status', 'accepted');
+        return $this->hasMany(Approval::class);
+    }
+
+    public function approvalLogs(): HasMany
+    {
+        return $this->hasMany(ApprovalLog::class);
+    }
+
+    public function materials(): HasMany
+    {
+        return $this->hasMany(Material::class);
+    }
+
+    public function revisions(): HasMany
+    {
+        return $this->hasMany(Revision::class);
+    }
+
+    public function acceptedParticipants(): HasMany
+    {
+        return $this->hasMany(Participant::class)->where('status', 'accepted');
     }
 
     public function availableSlots(): int
     {
-        return max(0, $this->quota - $this->acceptedRegistrations()->count());
+        return max(0, $this->quota - $this->acceptedParticipants()->count());
     }
 
     public function isFull(): bool

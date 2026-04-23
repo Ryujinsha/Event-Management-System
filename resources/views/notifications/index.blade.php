@@ -17,8 +17,8 @@
     <div class="notification-item {{ !$notification->is_read ? 'unread' : '' }}">
         <div class="notification-icon {{ $notification->type }}">
             <i class="fas fa-{{ match($notification->type) {
-                'training' => 'chalkboard-teacher',
-                'registration' => 'clipboard-check',
+                'event' => 'chalkboard-teacher',
+                'participant' => 'clipboard-check',
                 'certificate' => 'award',
                 default => 'bell'
             } }}"></i>

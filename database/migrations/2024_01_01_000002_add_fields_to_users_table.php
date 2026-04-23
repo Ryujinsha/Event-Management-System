@@ -13,6 +13,8 @@ return new class extends Migration
             $table->string('student_id')->nullable()->after('email');
             $table->string('phone')->nullable()->after('student_id');
             $table->string('avatar')->nullable()->after('phone');
+            $table->string('department')->nullable()->after('avatar');
+            $table->string('organization')->nullable()->after('department');
         });
     }
 
@@ -20,7 +22,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropForeign(['role_id']);
-            $table->dropColumn(['role_id', 'student_id', 'phone', 'avatar']);
+            $table->dropColumn(['role_id', 'student_id', 'phone', 'avatar', 'department', 'organization']);
         });
     }
 };

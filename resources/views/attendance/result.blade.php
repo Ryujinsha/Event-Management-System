@@ -18,9 +18,9 @@
 
         <p style="color:var(--text-muted);margin-bottom:1.5rem;">{{ $message }}</p>
 
-        @if(isset($training))
+        @if(isset($event))
         <div style="background:var(--bg-input);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:1rem;margin-bottom:1.5rem;">
-            <p style="font-weight:600;color:var(--text-primary);">{{ $training->title }}</p>
+            <p style="font-weight:600;color:var(--text-primary);">{{ $event->title }}</p>
             <p style="color:var(--text-muted);font-size:0.8125rem;margin-top:0.25rem;">Checked in at {{ now()->format('H:i:s') }}</p>
         </div>
         @endif

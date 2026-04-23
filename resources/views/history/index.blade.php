@@ -1,21 +1,21 @@
 @extends('layouts.app')
-@section('title', 'Training History')
+@section('title', 'Event History')
 
 @section('content')
 <div class="section-header">
-    <h3 class="section-title">Training History</h3>
+    <h3 class="section-title">Event History</h3>
 </div>
 
-@forelse($registrations as $reg)
+@forelse($participants as $reg)
 <div class="card mb-2" style="display:flex;flex-direction:row;align-items:center;gap:1.5rem;padding:1.25rem 1.5rem;">
     <div style="width:48px;height:48px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;flex-shrink:0;
-        background:{{ match($reg->training_status) {
+        background:{{ match($reg->event_status) {
             'certificate_available' => 'var(--gradient-primary)',
             'completed' => 'var(--gradient-success)',
             'ongoing' => 'var(--gradient-info)',
             default => 'var(--gradient-warning)'
         } }};">
-        <i class="fas fa-{{ match($reg->training_status) {
+        <i class="fas fa-{{ match($reg->event_status) {
             'certificate_available' => 'award',
             'completed' => 'check',
             'ongoing' => 'spinner fa-spin',
@@ -23,20 +23,20 @@
         } }}" style="color:white;font-size:1.125rem;"></i>
     </div>
     <div style="flex:1;min-width:0;">
-        <h4 style="font-weight:700;font-size:1rem;margin-bottom:0.25rem;">{{ $reg->training->title }}</h4>
+        <h4 style="font-weight:700;font-size:1rem;margin-bottom:0.25rem;">{{ $reg->event->title }}</h4>
         <div style="font-size:0.8125rem;color:var(--text-muted);">
-            <i class="fas fa-calendar"></i> {{ $reg->training->start_date->format('d M Y') }}
+            <i class="fas fa-calendar"></i> {{ $reg->event->start_date->format('d M Y') }}
             <span style="margin:0 0.5rem;">•</span>
-            <i class="fas fa-map-marker-alt"></i> {{ $reg->training->location }}
+            <i class="fas fa-map-marker-alt"></i> {{ $reg->event->location }}
         </div>
     </div>
     <div style="text-align:right;flex-shrink:0;">
-        <span class="badge-status badge-{{ $reg->training_status }}">
-            {{ match($reg->training_status) {
+        <span class="badge-status badge-{{ $reg->event_status }}">
+            {{ match($reg->event_status) {
                 'certificate_available' => 'Certificate Available',
                 'completed' => 'Completed',
                 'ongoing' => 'Ongoing',
-                default => ucfirst($reg->training_status)
+                default => ucfirst($reg->event_status)
             } }}
         </span>
         @if($reg->certificate)
@@ -52,9 +52,9 @@
 <div class="card">
     <div class="empty-state" style="padding:3rem;">
         <i class="fas fa-history"></i>
-        <h3>No training history</h3>
-        <p>Your completed trainings will appear here</p>
-        <a href="{{ route('trainings.index') }}" class="btn btn-primary mt-2"><i class="fas fa-search"></i> Browse Trainings</a>
+        <h3>No event history</h3>
+        <p>Your completed events will appear here</p>
+        <a href="{{ route('events.index') }}" class="btn btn-primary mt-2"><i class="fas fa-search"></i> Browse Events</a>
     </div>
 </div>
 @endforelse

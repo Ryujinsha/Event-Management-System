@@ -26,16 +26,28 @@ class AdminSeeder extends Seeder
 
         // Create demo users for testing
         $studentRole = Role::where('slug', 'student')->first();
-        $facultyRole = Role::where('slug', 'faculty')->first();
+        $committeeRole = Role::where('slug', 'committee')->first();
         $lecturerRole = Role::where('slug', 'lecturer')->first();
+        $headRole = Role::where('slug', 'head_csdl')->first();
 
         User::firstOrCreate(
-            ['email' => 'faculty@tms.test'],
+            ['email' => 'committee@tms.test'],
             [
-                'name' => 'Faculty Member',
-                'email' => 'faculty@tms.test',
+                'name' => 'Event Committee',
+                'email' => 'committee@tms.test',
                 'password' => Hash::make('password'),
-                'role_id' => $facultyRole->id,
+                'role_id' => $committeeRole->id ?? null,
+                'email_verified_at' => now(),
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'head@tms.test'],
+            [
+                'name' => 'Head of CSDL',
+                'email' => 'head@tms.test',
+                'password' => Hash::make('password'),
+                'role_id' => $headRole->id ?? null,
                 'email_verified_at' => now(),
             ]
         );
@@ -46,7 +58,7 @@ class AdminSeeder extends Seeder
                 'name' => 'Demo Student',
                 'email' => 'student@tms.test',
                 'password' => Hash::make('password'),
-                'role_id' => $studentRole->id,
+                'role_id' => $studentRole->id ?? null,
                 'student_id' => 'STD-2024-001',
                 'email_verified_at' => now(),
             ]
@@ -58,7 +70,7 @@ class AdminSeeder extends Seeder
                 'name' => 'Demo Lecturer',
                 'email' => 'lecturer@tms.test',
                 'password' => Hash::make('password'),
-                'role_id' => $lecturerRole->id,
+                'role_id' => $lecturerRole->id ?? null,
                 'email_verified_at' => now(),
             ]
         );

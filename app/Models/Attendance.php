@@ -10,7 +10,7 @@ class Attendance extends Model
     protected $table = 'attendance';
 
     protected $fillable = [
-        'user_id', 'training_id', 'checked_in_at', 'ip_address',
+        'user_id', 'event_id', 'checked_in_at', 'ip_address',
     ];
 
     protected function casts(): array
@@ -25,8 +25,8 @@ class Attendance extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function training(): BelongsTo
+    public function event(): BelongsTo
     {
-        return $this->belongsTo(Training::class);
+        return $this->belongsTo(Event::class);
     }
 }

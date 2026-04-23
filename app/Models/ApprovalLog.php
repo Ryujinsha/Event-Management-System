@@ -5,11 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Report extends Model
+class ApprovalLog extends Model
 {
     protected $fillable = [
-        'event_id', 'created_by', 'title', 'content',
-        'summary', 'total_participants', 'total_attended',
+        'event_id', 'approver_id', 'level', 'action', 'notes',
     ];
 
     public function event(): BelongsTo
@@ -17,8 +16,8 @@ class Report extends Model
         return $this->belongsTo(Event::class);
     }
 
-    public function creator(): BelongsTo
+    public function approver(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'approver_id');
     }
 }

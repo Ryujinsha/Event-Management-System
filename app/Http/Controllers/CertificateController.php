@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Certificate;
-use App\Models\Registration;
-use App\Models\Training;
+use App\Models\Participant;
+use App\Models\Event;
 use App\Services\NotificationService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ class CertificateController extends Controller
 {
     public function index()
     {
-        $certificates = Certificate::with('training')
+        $certificates = Certificate::with('event')
             ->where('user_id', auth()->id())
             ->latest()
             ->paginate(10);
@@ -21,41 +21,45 @@ class CertificateController extends Controller
         return view('certificates.index', compact('certificates'));
     }
 
-    public function manage(Training $training)
+    public function manage(Event $event)
     {
         $certificates = Certificate::with('user')
-            ->where('training_id', $training->id)
+            ->where('event_id', $event->id)
             ->get();
 
-        $acceptedRegistrations = Registration::with('user')
-            ->where('training_id', $training->id)
+        $acceptedParticipants = Participant::with('user')
+            ->where('event_id', $event->id)
             ->where('status', 'accepted')
             ->get();
 
-        return view('certificates.manage', compact('training', 'certificates', 'acceptedRegistrations'));
+        return view('certificates.manage', compact('event', 'certificates', 'acceptedParticipants'));
     }
 
-    public function activate(Training $training)
+    public function activate(Event $event)
     {
-        $acceptedRegistrations = Registration::with('user')
-            ->where('training_id', $training->id)
+        if ($event->status !== 'completed') {
+            return back()->with('error', 'Certificates can only be generated after the event is completed.');
+        }
+
+        $acceptedParticipants = Participant::with('user')
+            ->where('event_id', $event->id)
             ->where('status', 'accepted')
             ->get();
 
-        foreach ($acceptedRegistrations as $registration) {
-            $existing = Certificate::where('user_id', $registration->user_id)
-                ->where('training_id', $training->id)
+        foreach ($acceptedParticipants as $participant) {
+            $existing = Certificate::where('user_id', $participant->user_id)
+                ->where('event_id', $event->id)
                 ->first();
 
             if (!$existing) {
                 Certificate::create([
                     'certificate_number' => Certificate::generateCertificateNumber(),
-                    'user_id' => $registration->user_id,
-                    'training_id' => $training->id,
+                    'user_id' => $participant->user_id,
+                    'event_id' => $event->id,
                     'status' => 'available',
                 ]);
 
-                NotificationService::notifyCertificateAvailable($registration->user, $training);
+                NotificationService::notifyCertificateAvailable($participant->user, $event);
             }
         }
 
@@ -68,7 +72,7 @@ class CertificateController extends Controller
             abort(403);
         }
 
-        $certificate->load(['user', 'training']);
+        $certificate->load(['user', 'event']);
 
         $pdf = Pdf::loadView('certificates.pdf', compact('certificate'))
             ->setPaper('a4', 'landscape');

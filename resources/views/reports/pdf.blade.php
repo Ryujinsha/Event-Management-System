@@ -19,14 +19,14 @@
 </style>
 </head><body>
 <div class="header">
-    <h1>Training Report</h1>
+    <h1>Event Report</h1>
     <p style="color:#666;">{{ $report->title }}</p>
 </div>
 
 <table style="margin-bottom:20px;width:auto;">
-    <tr><td style="border:none;padding:3px 20px 3px 0;"><strong>Training:</strong></td><td style="border:none;padding:3px;">{{ $report->training->title }}</td></tr>
-    <tr><td style="border:none;padding:3px 20px 3px 0;"><strong>Date:</strong></td><td style="border:none;padding:3px;">{{ $report->training->start_date->format('d M Y') }} — {{ $report->training->end_date->format('d M Y') }}</td></tr>
-    <tr><td style="border:none;padding:3px 20px 3px 0;"><strong>Location:</strong></td><td style="border:none;padding:3px;">{{ $report->training->location }}</td></tr>
+    <tr><td style="border:none;padding:3px 20px 3px 0;"><strong>Event:</strong></td><td style="border:none;padding:3px;">{{ $report->event->title }}</td></tr>
+    <tr><td style="border:none;padding:3px 20px 3px 0;"><strong>Date:</strong></td><td style="border:none;padding:3px;">{{ $report->event->start_date->format('d M Y') }} — {{ $report->event->end_date->format('d M Y') }}</td></tr>
+    <tr><td style="border:none;padding:3px 20px 3px 0;"><strong>Location:</strong></td><td style="border:none;padding:3px;">{{ $report->event->location }}</td></tr>
     <tr><td style="border:none;padding:3px 20px 3px 0;"><strong>Created By:</strong></td><td style="border:none;padding:3px;">{{ $report->creator->name }}</td></tr>
     <tr><td style="border:none;padding:3px 20px 3px 0;"><strong>Total Participants:</strong></td><td style="border:none;padding:3px;">{{ $report->total_participants }}</td></tr>
     <tr><td style="border:none;padding:3px 20px 3px 0;"><strong>Total Attended:</strong></td><td style="border:none;padding:3px;">{{ $report->total_attended }}</td></tr>
@@ -40,12 +40,12 @@
 <h2>Report Content</h2>
 <div class="content">{!! nl2br(e($report->content)) !!}</div>
 
-<h2>Registrations</h2>
+<h2>Participants</h2>
 <table>
     <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Reg Number</th><th>Status</th></tr></thead>
     <tbody>
-    @foreach($registrations as $i => $reg)
-    <tr><td>{{ $i+1 }}</td><td>{{ $reg->user->name }}</td><td>{{ $reg->user->email }}</td><td>{{ $reg->registration_number }}</td><td>{{ ucfirst($reg->status) }}</td></tr>
+    @foreach($participants as $i => $reg)
+    <tr><td>{{ $i+1 }}</td><td>{{ $reg->user->name }}</td><td>{{ $reg->user->email }}</td><td>{{ $reg->participant_number }}</td><td>{{ ucfirst($reg->status) }}</td></tr>
     @endforeach
     </tbody>
 </table>
@@ -60,5 +60,5 @@
     </tbody>
 </table>
 
-<div class="footer">Generated on {{ now()->format('d M Y H:i:s') }} — Training Management System</div>
+<div class="footer">Generated on {{ now()->format('d M Y H:i:s') }} — Event Management System</div>
 </body></html>

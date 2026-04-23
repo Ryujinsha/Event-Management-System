@@ -7,8 +7,8 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\TrainingController;
-use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CertificateController;
@@ -44,33 +44,33 @@ Route::middleware(['auth'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Trainings
-    Route::resource('trainings', TrainingController::class);
+    // Events
+    Route::resource('events', EventController::class);
 
-    // Registrations
-    Route::post('/trainings/{training}/register', [RegistrationController::class, 'store'])->name('registrations.store');
-    Route::get('/my-registrations', [RegistrationController::class, 'myRegistrations'])->name('registrations.my');
+    // Participants
+    Route::post('/events/{event}/register', [ParticipantController::class, 'store'])->name('participants.store');
+    Route::get('/my-participants', [ParticipantController::class, 'myParticipants'])->name('participants.my');
 
-    // Admin/Faculty routes
-    Route::middleware('role:admin,faculty')->group(function () {
-        Route::get('/registrations', [RegistrationController::class, 'index'])->name('registrations.index');
-        Route::patch('/registrations/{registration}/status', [RegistrationController::class, 'updateStatus'])->name('registrations.updateStatus');
+    // Admin/Committee routes
+    Route::middleware('role:admin,committee,head_csdl,head_baak,head_finance,head_gsd,head_sis,head_learning,acoo')->group(function () {
+        Route::get('/participants', [ParticipantController::class, 'index'])->name('participants.index');
+        Route::patch('/participants/{participant}/status', [ParticipantController::class, 'updateStatus'])->name('participants.updateStatus');
 
         // Attendance management
-        Route::get('/trainings/{training}/attendance/generate', [AttendanceController::class, 'generate'])->name('attendance.generate');
-        Route::post('/trainings/{training}/attendance/generate-qr', [AttendanceController::class, 'generateQR'])->name('attendance.generateQR');
-        Route::get('/trainings/{training}/attendance/list', [AttendanceController::class, 'list'])->name('attendance.list');
+        Route::get('/events/{event}/attendance/generate', [AttendanceController::class, 'generate'])->name('attendance.generate');
+        Route::post('/events/{event}/attendance/generate-qr', [AttendanceController::class, 'generateQR'])->name('attendance.generateQR');
+        Route::get('/events/{event}/attendance/list', [AttendanceController::class, 'list'])->name('attendance.list');
 
         // Reports
-        Route::get('/trainings/{training}/reports/create', [ReportController::class, 'create'])->name('reports.create');
-        Route::post('/trainings/{training}/reports', [ReportController::class, 'store'])->name('reports.store');
+        Route::get('/events/{event}/reports/create', [ReportController::class, 'create'])->name('reports.create');
+        Route::post('/events/{event}/reports', [ReportController::class, 'store'])->name('reports.store');
         Route::get('/reports/{report}', [ReportController::class, 'show'])->name('reports.show');
         Route::get('/reports/{report}/pdf', [ReportController::class, 'exportPdf'])->name('reports.exportPdf');
         Route::get('/reports/{report}/csv', [ReportController::class, 'exportCsv'])->name('reports.exportCsv');
 
         // Certificates management
-        Route::get('/trainings/{training}/certificates', [CertificateController::class, 'manage'])->name('certificates.manage');
-        Route::post('/trainings/{training}/certificates/activate', [CertificateController::class, 'activate'])->name('certificates.activate');
+        Route::get('/events/{event}/certificates', [CertificateController::class, 'manage'])->name('certificates.manage');
+        Route::post('/events/{event}/certificates/activate', [CertificateController::class, 'activate'])->name('certificates.activate');
     });
 
     // Attendance check-in (for students)

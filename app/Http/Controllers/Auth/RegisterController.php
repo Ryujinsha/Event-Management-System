@@ -11,7 +11,7 @@ use Illuminate\Validation\Rules\Password;
 
 class RegisterController extends Controller
 {
-    public function showRegistrationForm()
+    public function showParticipantForm()
     {
         return view('auth.register');
     }
@@ -43,6 +43,6 @@ class RegisterController extends Controller
         auth()->login($user);
 
         return redirect()->route('dashboard')
-            ->with('success', 'Registration successful! Welcome to the system.');
+            ->with('success', 'Participant successful! Welcome to the system.');
     }
 }

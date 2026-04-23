@@ -3,13 +3,13 @@
 
 @section('content')
 <div style="margin-bottom:1.5rem;">
-    <a href="{{ route('trainings.show', $training) }}" class="link"><i class="fas fa-arrow-left"></i> Back to {{ $training->title }}</a>
+    <a href="{{ route('events.show', $event) }}" class="link"><i class="fas fa-arrow-left"></i> Back to {{ $event->title }}</a>
 </div>
 
 <div class="card mb-3">
     <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-award" style="color:var(--primary-400);margin-right:0.5rem;"></i> Certificates — {{ $training->title }}</h3>
-        <form method="POST" action="{{ route('certificates.activate', $training) }}">
+        <h3 class="card-title"><i class="fas fa-award" style="color:var(--primary-400);margin-right:0.5rem;"></i> Certificates — {{ $event->title }}</h3>
+        <form method="POST" action="{{ route('certificates.activate', $event) }}">
             @csrf
             <button type="submit" class="btn btn-primary" onclick="return confirm('This will generate certificates for all accepted participants. Continue?')">
                 <i class="fas fa-certificate"></i> Activate Certificates
@@ -18,7 +18,7 @@
     </div>
     <div class="card-body">
         <p style="color:var(--text-muted);margin-bottom:1rem;">
-            <strong>{{ $acceptedRegistrations->count() }}</strong> accepted participants •
+            <strong>{{ $acceptedParticipants->count() }}</strong> accepted participants •
             <strong>{{ $certificates->count() }}</strong> certificates issued
         </p>
     </div>

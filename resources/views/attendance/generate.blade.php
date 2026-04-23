@@ -3,7 +3,7 @@
 
 @section('content')
 <div style="margin-bottom:1.5rem;">
-    <a href="{{ route('trainings.show', $training) }}" class="link"><i class="fas fa-arrow-left"></i> Back to {{ $training->title }}</a>
+    <a href="{{ route('events.show', $event) }}" class="link"><i class="fas fa-arrow-left"></i> Back to {{ $event->title }}</a>
 </div>
 
 <div class="card" style="max-width:600px;">
@@ -31,7 +31,7 @@
                 </div>
             </div>
         @else
-            <form method="POST" action="{{ route('attendance.generateQR', $training) }}">
+            <form method="POST" action="{{ route('attendance.generateQR', $event) }}">
                 @csrf
                 <div class="form-group">
                     <label class="form-label">QR Code Duration (minutes)</label>
@@ -41,10 +41,10 @@
                 <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-qrcode"></i> Generate QR Code</button>
             </form>
 
-            @if($training->isQrValid())
+            @if($event->isQrValid())
             <div class="alert alert-info mt-2">
                 <i class="fas fa-info-circle"></i>
-                An active QR code already exists. It expires at {{ $training->qr_expires_at->format('H:i:s') }}.
+                An active QR code already exists. It expires at {{ $event->qr_expires_at->format('H:i:s') }}.
                 Generating a new one will replace it.
             </div>
             @endif

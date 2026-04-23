@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Training;
+use App\Models\Event;
 use App\Models\User;
-use App\Models\Registration;
+use App\Models\Participant;
 use App\Models\Certificate;
 use Illuminate\Http\Request;
 
@@ -17,42 +17,50 @@ class DashboardController extends Controller
 
         if ($user->isAdmin()) {
             $data = [
-                'totalTrainings' => Training::count(),
+                'totalEvents' => Event::count(),
                 'totalUsers' => User::count(),
-                'pendingRegistrations' => Registration::where('status', 'pending')->count(),
-                'completedTrainings' => Training::where('status', 'completed')->count(),
-                'ongoingTrainings' => Training::where('status', 'ongoing')->count(),
-                'recentTrainings' => Training::latest()->take(5)->get(),
-                'recentRegistrations' => Registration::with(['user', 'training'])->latest()->take(5)->get(),
+                'pendingParticipants' => Participant::where('status', 'pending')->count(),
+                'completedEvents' => Event::where('status', 'completed')->count(),
+                'ongoingEvents' => Event::where('status', 'ongoing')->count(),
+                'recentEvents' => Event::latest()->take(5)->get(),
+                'recentParticipants' => Participant::with(['user', 'event'])->latest()->take(5)->get(),
                 'monthlyStats' => $this->getMonthlyStats(),
             ];
             return view('dashboard.admin', $data);
         }
 
-        if ($user->isFaculty()) {
+        if ($user->isCommittee()) {
             $data = [
-                'myTrainings' => Training::where('created_by', $user->id)->latest()->get(),
-                'totalCreated' => Training::where('created_by', $user->id)->count(),
-                'pendingApprovals' => Registration::whereHas('training', fn($q) => $q->where('created_by', $user->id))
+                'myEvents' => Event::where('created_by', $user->id)->latest()->get(),
+                'totalCreated' => Event::where('created_by', $user->id)->count(),
+                'pendingApprovals' => Participant::whereHas('event', fn($q) => $q->where('created_by', $user->id))
                     ->where('status', 'pending')->count(),
             ];
-            return view('dashboard.faculty', $data);
+            return view('dashboard.committee', $data);
+        }
+
+        if ($user->isHeadDepartment() || $user->isACOO()) {
+            $data = [
+                'pendingApprovals' => Event::where('status', 'pending_approval')->count(),
+                'recentEvents' => Event::latest()->take(5)->get(),
+            ];
+            return view('dashboard.head', $data);
         }
 
         if ($user->isStudent()) {
             $data = [
-                'myRegistrations' => Registration::with('training')->where('user_id', $user->id)->latest()->take(5)->get(),
-                'upcomingTrainings' => Training::where('status', 'published')
+                'myParticipants' => Participant::with('event')->where('user_id', $user->id)->latest()->take(5)->get(),
+                'upcomingEvents' => Event::where('status', 'published')
                     ->where('start_date', '>', now())->latest()->take(5)->get(),
                 'certificatesCount' => Certificate::where('user_id', $user->id)->where('status', 'available')->count(),
-                'registeredCount' => Registration::where('user_id', $user->id)->count(),
+                'registeredCount' => Participant::where('user_id', $user->id)->count(),
             ];
             return view('dashboard.student', $data);
         }
 
         // Lecturer
         $data = [
-            'availableTrainings' => Training::where('status', 'published')->latest()->take(10)->get(),
+            'availableEvents' => Event::where('status', 'published')->latest()->take(10)->get(),
             'notifications' => $user->notifications()->latest()->take(10)->get(),
         ];
         return view('dashboard.lecturer', $data);
@@ -65,8 +73,8 @@ class DashboardController extends Controller
             $date = now()->subMonths($i);
             $stats[] = [
                 'month' => $date->format('M'),
-                'trainings' => Training::whereMonth('created_at', $date->month)->whereYear('created_at', $date->year)->count(),
-                'registrations' => Registration::whereMonth('created_at', $date->month)->whereYear('created_at', $date->year)->count(),
+                'events' => Event::whereMonth('created_at', $date->month)->whereYear('created_at', $date->year)->count(),
+                'participants' => Participant::whereMonth('created_at', $date->month)->whereYear('created_at', $date->year)->count(),
             ];
         }
         return $stats;

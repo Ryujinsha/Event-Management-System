@@ -21,6 +21,8 @@ class User extends Authenticatable
         'student_id',
         'phone',
         'avatar',
+        'department',
+        'organization',
     ];
 
     protected $hidden = [
@@ -42,9 +44,9 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    public function registrations(): HasMany
+    public function participants(): HasMany
     {
-        return $this->hasMany(Registration::class);
+        return $this->hasMany(Participant::class);
     }
 
     public function attendances(): HasMany
@@ -62,9 +64,9 @@ class User extends Authenticatable
         return $this->hasMany(Notification::class);
     }
 
-    public function createdTrainings(): HasMany
+    public function createdEvents(): HasMany
     {
-        return $this->hasMany(Training::class, 'created_by');
+        return $this->hasMany(Event::class, 'created_by');
     }
 
     // Role helpers
@@ -73,9 +75,9 @@ class User extends Authenticatable
         return $this->role?->slug === 'admin';
     }
 
-    public function isFaculty(): bool
+    public function isCommittee(): bool
     {
-        return $this->role?->slug === 'faculty';
+        return $this->role?->slug === 'committee';
     }
 
     public function isStudent(): bool
@@ -86,6 +88,29 @@ class User extends Authenticatable
     public function isLecturer(): bool
     {
         return $this->role?->slug === 'lecturer';
+    }
+
+    public function isStaff(): bool
+    {
+        return $this->role?->slug === 'staff';
+    }
+
+    public function isExternal(): bool
+    {
+        return $this->role?->slug === 'external';
+    }
+
+    public function isHeadDepartment(): bool
+    {
+        return in_array($this->role?->slug, [
+            'head_csdl', 'head_baak', 'head_finance', 
+            'head_gsd', 'head_sis', 'head_learning'
+        ]);
+    }
+
+    public function isACOO(): bool
+    {
+        return $this->role?->slug === 'acoo';
     }
 
     public function hasRole(string $role): bool

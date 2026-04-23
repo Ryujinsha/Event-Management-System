@@ -11,12 +11,12 @@ return new class extends Migration
         Schema::create('attendance', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('training_id')->constrained('trainings')->cascadeOnDelete();
+            $table->foreignId('event_id')->constrained('events')->cascadeOnDelete();
             $table->timestamp('checked_in_at')->useCurrent();
             $table->string('ip_address')->nullable();
             $table->timestamps();
 
-            $table->unique(['user_id', 'training_id']);
+            $table->unique(['user_id', 'event_id']);
         });
     }
 

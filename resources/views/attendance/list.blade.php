@@ -3,13 +3,13 @@
 
 @section('content')
 <div style="margin-bottom:1.5rem;">
-    <a href="{{ route('trainings.show', $training) }}" class="link"><i class="fas fa-arrow-left"></i> Back to {{ $training->title }}</a>
+    <a href="{{ route('events.show', $event) }}" class="link"><i class="fas fa-arrow-left"></i> Back to {{ $event->title }}</a>
 </div>
 
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-list-check" style="color:var(--primary-400);margin-right:0.5rem;"></i> Attendance — {{ $training->title }}</h3>
-        <span class="badge-status badge-{{ $training->status }}">{{ $attendances->count() }} checked in</span>
+        <h3 class="card-title"><i class="fas fa-list-check" style="color:var(--primary-400);margin-right:0.5rem;"></i> Attendance — {{ $event->title }}</h3>
+        <span class="badge-status badge-{{ $event->status }}">{{ $attendances->count() }} checked in</span>
     </div>
     <div class="table-container">
         <table class="table">

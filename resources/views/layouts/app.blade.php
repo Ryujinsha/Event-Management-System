@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard') — TMS</title>
-    <meta name="description" content="@yield('description', 'Training Management System Dashboard')">
+    <meta name="description" content="@yield('description', 'Event Management System Dashboard')">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -31,15 +31,15 @@
                 <span>Dashboard</span>
             </a>
 
-            <a href="{{ route('trainings.index') }}" class="nav-link {{ request()->routeIs('trainings.*') ? 'active' : '' }}">
+            <a href="{{ route('events.index') }}" class="nav-link {{ request()->routeIs('events.*') ? 'active' : '' }}">
                 <i class="fas fa-chalkboard-teacher"></i>
-                <span>Trainings</span>
+                <span>Events</span>
             </a>
 
             @if(auth()->user()->isStudent())
-                <a href="{{ route('registrations.my') }}" class="nav-link {{ request()->routeIs('registrations.my') ? 'active' : '' }}">
+                <a href="{{ route('participants.my') }}" class="nav-link {{ request()->routeIs('participants.my') ? 'active' : '' }}">
                     <i class="fas fa-clipboard-list"></i>
-                    <span>My Registrations</span>
+                    <span>My Participants</span>
                 </a>
                 <a href="{{ route('attendance.scan') }}" class="nav-link {{ request()->routeIs('attendance.scan') ? 'active' : '' }}">
                     <i class="fas fa-qrcode"></i>
@@ -55,17 +55,17 @@
                 </a>
             @endif
 
-            @if(auth()->user()->isAdmin() || auth()->user()->isFaculty())
+            @if(auth()->user()->isAdmin() || auth()->user()->isCommittee() || auth()->user()->isHeadDepartment())
                 <div class="nav-divider">
                     <span>Management</span>
                 </div>
-                <a href="{{ route('trainings.create') }}" class="nav-link {{ request()->routeIs('trainings.create') ? 'active' : '' }}">
+                <a href="{{ route('events.create') }}" class="nav-link {{ request()->routeIs('events.create') ? 'active' : '' }}">
                     <i class="fas fa-plus-circle"></i>
-                    <span>Create Training</span>
+                    <span>Create Event</span>
                 </a>
-                <a href="{{ route('registrations.index') }}" class="nav-link {{ request()->routeIs('registrations.index') ? 'active' : '' }}">
+                <a href="{{ route('participants.index') }}" class="nav-link {{ request()->routeIs('participants.index') ? 'active' : '' }}">
                     <i class="fas fa-users-cog"></i>
-                    <span>Manage Registrations</span>
+                    <span>Manage Participants</span>
                 </a>
             @endif
 

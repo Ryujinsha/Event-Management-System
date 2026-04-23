@@ -1,26 +1,26 @@
 @extends('layouts.app')
-@section('title', 'Create Training')
+@section('title', 'Create Event')
 
 @section('content')
 <div style="margin-bottom:1.5rem;">
-    <a href="{{ route('trainings.index') }}" class="link"><i class="fas fa-arrow-left"></i> Back to trainings</a>
+    <a href="{{ route('events.index') }}" class="link"><i class="fas fa-arrow-left"></i> Back to events</a>
 </div>
 
 <div class="card" style="max-width:720px;">
     <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-plus-circle" style="color:var(--primary-400);margin-right:0.5rem;"></i> Create New Training</h3>
+        <h3 class="card-title"><i class="fas fa-plus-circle" style="color:var(--primary-400);margin-right:0.5rem;"></i> Create New Event</h3>
     </div>
     <div class="card-body">
-        <form method="POST" action="{{ route('trainings.store') }}">
+        <form method="POST" action="{{ route('events.store') }}">
             @csrf
             <div class="form-group">
-                <label class="form-label" for="title">Training Title *</label>
+                <label class="form-label" for="title">Event Title *</label>
                 <input type="text" id="title" name="title" class="form-input" value="{{ old('title') }}" placeholder="e.g. Web Development Workshop" required>
             </div>
 
             <div class="form-group">
                 <label class="form-label" for="description">Description *</label>
-                <textarea id="description" name="description" class="form-input" rows="5" placeholder="Describe the training objectives, prerequisites, and agenda..." required>{{ old('description') }}</textarea>
+                <textarea id="description" name="description" class="form-input" rows="5" placeholder="Describe the event objectives, prerequisites, and agenda..." required>{{ old('description') }}</textarea>
             </div>
 
             <div class="form-row">
@@ -46,16 +46,24 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="status">Status *</label>
+                <label class="form-label" for="status">Initial Status *</label>
                 <select id="status" name="status" class="form-input">
-                    <option value="draft" {{ old('status') === 'draft' ? 'selected' : '' }}>Draft (save without publishing)</option>
-                    <option value="published" {{ old('status') === 'published' ? 'selected' : '' }}>Published (open for registration)</option>
+                    <option value="draft" {{ old('status') === 'draft' ? 'selected' : '' }}>Draft (save without submitting)</option>
+                    <option value="pending_approval" {{ old('status') === 'pending_approval' ? 'selected' : '' }}>Pending Approval (submit to Head Department)</option>
                 </select>
             </div>
 
+            <div class="form-group">
+                <label class="form-label">Event Materials (Optional)</label>
+                <div style="background:#f8f9fa; padding:15px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:10px;">
+                    <input type="text" name="materials[0][title]" class="form-input" style="margin-bottom:10px;" placeholder="Material Title">
+                    <textarea name="materials[0][description]" class="form-input" rows="2" placeholder="Material Description"></textarea>
+                </div>
+            </div>
+
             <div class="action-group mt-2">
-                <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-save"></i> Create Training</button>
-                <a href="{{ route('trainings.index') }}" class="btn btn-outline">Cancel</a>
+                <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-save"></i> Create Event</button>
+                <a href="{{ route('events.index') }}" class="btn btn-outline">Cancel</a>
             </div>
         </form>
     </div>

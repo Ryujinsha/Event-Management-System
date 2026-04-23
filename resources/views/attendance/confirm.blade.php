@@ -11,10 +11,10 @@
         <p style="color:var(--text-muted);margin-bottom:1.5rem;">You are about to check in for:</p>
 
         <div style="background:var(--bg-input);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:1.25rem;margin-bottom:1.5rem;">
-            <h3 style="font-weight:700;font-size:1.125rem;margin-bottom:0.5rem;">{{ $training->title }}</h3>
+            <h3 style="font-weight:700;font-size:1.125rem;margin-bottom:0.5rem;">{{ $event->title }}</h3>
             <p style="color:var(--text-muted);font-size:0.875rem;">
-                <i class="fas fa-calendar"></i> {{ $training->start_date->format('d M Y, H:i') }} •
-                <i class="fas fa-map-marker-alt"></i> {{ $training->location }}
+                <i class="fas fa-calendar"></i> {{ $event->start_date->format('d M Y, H:i') }} •
+                <i class="fas fa-map-marker-alt"></i> {{ $event->location }}
             </p>
         </div>
 

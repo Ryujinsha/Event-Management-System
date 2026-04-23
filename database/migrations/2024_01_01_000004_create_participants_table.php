@@ -8,20 +8,20 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('registrations', function (Blueprint $table) {
+        Schema::create('participants', function (Blueprint $table) {
             $table->id();
             $table->string('registration_number')->unique();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('training_id')->constrained('trainings')->cascadeOnDelete();
+            $table->foreignId('event_id')->constrained('events')->cascadeOnDelete();
             $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');
             $table->timestamps();
 
-            $table->unique(['user_id', 'training_id']);
+            $table->unique(['user_id', 'event_id']);
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('registrations');
+        Schema::dropIfExists('participants');
     }
 };

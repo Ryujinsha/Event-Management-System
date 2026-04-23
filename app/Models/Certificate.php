@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Certificate extends Model
 {
     protected $fillable = [
-        'certificate_number', 'user_id', 'training_id', 'status', 'file_path',
+        'certificate_number', 'user_id', 'event_id', 'status', 'file_path',
     ];
 
     public function user(): BelongsTo
@@ -16,9 +16,9 @@ class Certificate extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function training(): BelongsTo
+    public function event(): BelongsTo
     {
-        return $this->belongsTo(Training::class);
+        return $this->belongsTo(Event::class);
     }
 
     public static function generateCertificateNumber(): string

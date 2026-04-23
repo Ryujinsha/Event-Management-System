@@ -3,7 +3,7 @@
 
 @section('content')
 <div style="margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
-    <a href="{{ route('trainings.show', $report->training) }}" class="link"><i class="fas fa-arrow-left"></i> Back to training</a>
+    <a href="{{ route('events.show', $report->event) }}" class="link"><i class="fas fa-arrow-left"></i> Back to event</a>
     <div class="action-group">
         <a href="{{ route('reports.exportPdf', $report) }}" class="btn btn-primary btn-sm"><i class="fas fa-file-pdf"></i> Export PDF</a>
         <a href="{{ route('reports.exportCsv', $report) }}" class="btn btn-success btn-sm"><i class="fas fa-file-csv"></i> Export CSV</a>
@@ -17,8 +17,8 @@
     <div class="card-body">
         <div class="detail-grid mb-3">
             <div class="detail-item">
-                <div class="detail-label">Training</div>
-                <div class="detail-value">{{ $report->training->title }}</div>
+                <div class="detail-label">Event</div>
+                <div class="detail-value">{{ $report->event->title }}</div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Created By</div>

@@ -3,24 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Report;
-use App\Models\Training;
-use App\Models\Registration;
+use App\Models\Event;
+use App\Models\Participant;
 use App\Models\Attendance;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-    public function create(Training $training)
+    public function create(Event $event)
     {
-        $totalParticipants = Registration::where('training_id', $training->id)
+        $totalParticipants = Participant::where('event_id', $event->id)
             ->where('status', 'accepted')->count();
-        $totalAttended = Attendance::where('training_id', $training->id)->count();
+        $totalAttended = Attendance::where('event_id', $event->id)->count();
 
-        return view('reports.create', compact('training', 'totalParticipants', 'totalAttended'));
+        return view('reports.create', compact('event', 'totalParticipants', 'totalAttended'));
     }
 
-    public function store(Request $request, Training $training)
+    public function store(Request $request, Event $event)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -28,11 +28,11 @@ class ReportController extends Controller
             'summary' => 'nullable|string',
         ]);
 
-        $validated['training_id'] = $training->id;
+        $validated['event_id'] = $event->id;
         $validated['created_by'] = auth()->id();
-        $validated['total_participants'] = Registration::where('training_id', $training->id)
+        $validated['total_participants'] = Participant::where('event_id', $event->id)
             ->where('status', 'accepted')->count();
-        $validated['total_attended'] = Attendance::where('training_id', $training->id)->count();
+        $validated['total_attended'] = Attendance::where('event_id', $event->id)->count();
 
         $report = Report::create($validated);
 
@@ -42,49 +42,49 @@ class ReportController extends Controller
 
     public function show(Report $report)
     {
-        $report->load(['training', 'creator']);
+        $report->load(['event', 'creator']);
         return view('reports.show', compact('report'));
     }
 
     public function exportPdf(Report $report)
     {
-        $report->load(['training.registrations.user', 'training.attendances.user', 'creator']);
-        $attendances = Attendance::with('user')->where('training_id', $report->training_id)->get();
-        $registrations = Registration::with('user')->where('training_id', $report->training_id)->get();
+        $report->load(['event.participants.user', 'event.attendances.user', 'creator']);
+        $attendances = Attendance::with('user')->where('event_id', $report->event_id)->get();
+        $participants = Participant::with('user')->where('event_id', $report->event_id)->get();
 
-        $pdf = Pdf::loadView('reports.pdf', compact('report', 'attendances', 'registrations'));
-        return $pdf->download("report-{$report->training->title}.pdf");
+        $pdf = Pdf::loadView('reports.pdf', compact('report', 'attendances', 'participants'));
+        return $pdf->download("report-{$report->event->title}.pdf");
     }
 
     public function exportCsv(Report $report)
     {
-        $report->load('training');
-        $attendances = Attendance::with('user')->where('training_id', $report->training_id)->get();
-        $registrations = Registration::with('user')->where('training_id', $report->training_id)->get();
+        $report->load('event');
+        $attendances = Attendance::with('user')->where('event_id', $report->event_id)->get();
+        $participants = Participant::with('user')->where('event_id', $report->event_id)->get();
 
-        $filename = "report-{$report->training->title}.csv";
+        $filename = "report-{$report->event->title}.csv";
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => "attachment; filename=\"{$filename}\"",
         ];
 
-        $callback = function () use ($report, $attendances, $registrations) {
+        $callback = function () use ($report, $attendances, $participants) {
             $file = fopen('php://output', 'w');
 
             // Report info
-            fputcsv($file, ['Training Report']);
+            fputcsv($file, ['Event Report']);
             fputcsv($file, ['Title', $report->title]);
-            fputcsv($file, ['Training', $report->training->title]);
-            fputcsv($file, ['Date', $report->training->start_date->format('Y-m-d')]);
+            fputcsv($file, ['Event', $report->event->title]);
+            fputcsv($file, ['Date', $report->event->start_date->format('Y-m-d')]);
             fputcsv($file, ['Total Participants', $report->total_participants]);
             fputcsv($file, ['Total Attended', $report->total_attended]);
             fputcsv($file, []);
 
-            // Registrations
-            fputcsv($file, ['Registrations']);
-            fputcsv($file, ['Name', 'Email', 'Registration Number', 'Status']);
-            foreach ($registrations as $reg) {
-                fputcsv($file, [$reg->user->name, $reg->user->email, $reg->registration_number, $reg->status]);
+            // Participants
+            fputcsv($file, ['Participants']);
+            fputcsv($file, ['Name', 'Email', 'Participant Number', 'Status']);
+            foreach ($participants as $reg) {
+                fputcsv($file, [$reg->user->name, $reg->user->email, $reg->participant_number, $reg->status]);
             }
             fputcsv($file, []);
 

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Notification extends Model
 {
     protected $fillable = [
-        'user_id', 'training_id', 'type', 'title', 'message', 'is_read',
+        'user_id', 'event_id', 'type', 'title', 'message', 'is_read',
     ];
 
     protected function casts(): array
@@ -23,8 +23,8 @@ class Notification extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function training(): BelongsTo
+    public function event(): BelongsTo
     {
-        return $this->belongsTo(Training::class);
+        return $this->belongsTo(Event::class);
     }
 }

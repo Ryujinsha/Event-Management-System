@@ -27,7 +27,7 @@
     .presented { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 2px; }
     .name { font-size: 28px; color: #1a1a3e; font-weight: bold; margin: 10px 0; border-bottom: 2px solid #4f46e5; display: inline-block; padding-bottom: 5px; }
     .desc { font-size: 13px; color: #555; line-height: 1.8; margin: 15px auto; max-width: 80%; }
-    .training-name { font-size: 16px; color: #4f46e5; font-weight: bold; margin: 10px 0; }
+    .event-name { font-size: 16px; color: #4f46e5; font-weight: bold; margin: 10px 0; }
     .date { font-size: 11px; color: #888; margin-top: 15px; }
     .cert-number { font-size: 10px; color: #aaa; position: absolute; bottom: 15px; right: 20px; }
     .footer-line { width: 150px; border-top: 1px solid #333; margin: 25px auto 5px; }
@@ -40,6 +40,8 @@
         <div class="corner corner-tr"></div>
         <div class="corner corner-bl"></div>
         <div class="corner corner-br"></div>
+        <div style="position: absolute; top: 30px; left: 40px; color: #4f46e5; font-weight: bold; font-size: 20px;">[HORIZON LOGO]</div>
+        <div style="position: absolute; top: 30px; right: 40px; color: #4f46e5; font-weight: bold; font-size: 20px;">[EVENT LOGO]</div>
 
         <div class="content">
             <div class="title">Certificate</div>
@@ -49,20 +51,23 @@
             <div class="name">{{ $certificate->user->name }}</div>
 
             <div class="desc">
-                For successfully completing the training program
+                For successfully completing the event program
             </div>
 
-            <div class="training-name">"{{ $certificate->training->title }}"</div>
+            <div class="event-name">"{{ $certificate->event->title }}"</div>
 
             <div class="desc">
-                Held at {{ $certificate->training->location }}<br>
-                {{ $certificate->training->start_date->format('d F Y') }} — {{ $certificate->training->end_date->format('d F Y') }}
+                Held at {{ $certificate->event->location }}<br>
+                Date: {{ $certificate->event->start_date->format('d F Y') }} — {{ $certificate->event->end_date->format('d F Y') }}
             </div>
 
-            <div class="date">Issued on {{ $certificate->created_at->format('d F Y') }}</div>
-
-            <div class="footer-line"></div>
-            <div class="signature-text">Training Management System<br>University Administration</div>
+            <div style="margin-top: 40px;">
+                <div class="footer-line"></div>
+                <div class="signature-text">
+                    Organizer: {{ $certificate->event->creator->name ?? 'Head of Committee' }}<br>
+                    Event Management System
+                </div>
+            </div>
         </div>
 
         <div class="cert-number">{{ $certificate->certificate_number }}</div>

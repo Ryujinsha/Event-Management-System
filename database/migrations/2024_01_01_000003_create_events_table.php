@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('trainings', function (Blueprint $table) {
+        Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->text('description');
@@ -16,7 +16,7 @@ return new class extends Migration
             $table->dateTime('end_date');
             $table->string('location');
             $table->integer('quota')->default(0);
-            $table->enum('status', ['draft', 'published', 'ongoing', 'completed', 'cancelled'])->default('draft');
+            $table->enum('status', ['draft', 'pending_approval', 'approved', 'ongoing', 'completed', 'cancelled'])->default('draft');
             $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();
             $table->string('qr_code')->nullable();
             $table->string('qr_token')->nullable();
@@ -27,6 +27,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('trainings');
+        Schema::dropIfExists('events');
     }
 };
