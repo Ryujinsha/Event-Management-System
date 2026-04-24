@@ -23,7 +23,13 @@ class EventController extends Controller
         }
 
         $events = $query->latest()->paginate(12);
-        return view('events.index', compact('events'));
+
+        $joinedEventIds = [];
+        if (auth()->check()) {
+            $joinedEventIds = auth()->user()->participants()->pluck('event_id')->toArray();
+        }
+
+        return view('events.index', compact('events', 'joinedEventIds'));
     }
 
     public function create()

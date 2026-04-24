@@ -2,18 +2,21 @@
 @section('title', 'Scan QR Code')
 
 @section('content')
-<div class="card" style="max-width:600px;margin:0 auto;">
-    <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-qrcode" style="color:var(--primary-400);margin-right:0.5rem;"></i> Scan QR Code</h3>
-    </div>
+<div class="card">
     <div class="card-body" x-data="qrScanner()">
         <p style="color:var(--text-muted);margin-bottom:1.5rem;text-align:center;">
             Point your camera at the QR code displayed by your trainer to check in.
         </p>
 
-        <div id="qr-reader" style="width:100%;border-radius:var(--radius-md);overflow:hidden;margin-bottom:1rem;"></div>
+        <div x-show="!started" style="text-align:center;padding:2rem;">
+            <button @click="startScanner()" class="btn btn-primary btn-lg" style="padding:1rem 2rem;">
+                <i class="fas fa-camera" style="margin-right:0.5rem;"></i> Start Scanning
+            </button>
+        </div>
 
-        <div x-show="scanning" style="text-align:center;color:var(--primary-400);">
+        <div id="qr-reader" x-show="started" style="width:100%;border-radius:var(--radius-md);overflow:hidden;margin-bottom:1rem;"></div>
+
+        <div x-show="scanning && started" style="text-align:center;color:var(--primary-400);">
             <i class="fas fa-spinner fa-spin" style="margin-right:0.5rem;"></i> Scanning...
         </div>
 
@@ -37,23 +40,29 @@
 <script>
 document.addEventListener('alpine:init', () => {
     Alpine.data('qrScanner', () => ({
-        scanning: true,
+        started: false,
+        scanning: false,
         result: '',
         success: false,
+        html5QrCode: null,
         init() {
-            const html5QrCode = new Html5Qrcode("qr-reader");
-            html5QrCode.start(
+            this.html5QrCode = new Html5Qrcode("qr-reader");
+        },
+        startScanner() {
+            this.started = true;
+            this.scanning = true;
+            this.html5QrCode.start(
                 { facingMode: "environment" },
                 { fps: 10, qrbox: { width: 250, height: 250 } },
                 (decodedText) => {
-                    html5QrCode.stop();
+                    this.html5QrCode.stop();
                     this.scanning = false;
-                    // Redirect to the check-in URL
                     window.location.href = decodedText;
                 },
                 (errorMessage) => {}
             ).catch((err) => {
                 this.scanning = false;
+                this.started = false;
                 this.result = 'Camera access denied or not available. Use manual entry below.';
                 this.success = false;
             });

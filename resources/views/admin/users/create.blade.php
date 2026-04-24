@@ -2,11 +2,6 @@
 @section('title', 'Create User')
 
 @section('content')
-<div class="section-header">
-    <h3 class="section-title">Create New User</h3>
-    <a href="{{ route('admin.users.index') }}" class="btn btn-outline btn-sm"><i class="fas fa-arrow-left"></i> Back</a>
-</div>
-
 <div class="card">
     <form action="{{ route('admin.users.store') }}" method="POST">
         @csrf
@@ -62,7 +57,8 @@
             </div>
         </div>
 
-        <div style="margin-top:1.5rem;display:flex;justify-content:flex-end;">
+        <div style="margin-top:1.5rem;display:flex;justify-content:flex-end;gap:0.75rem;">
+            <a href="{{ route('admin.users.index') }}" class="btn" style="background:#473f3d;color:white;border:none;">Cancel</a>
             <button type="submit" class="btn btn-primary">Create User</button>
         </div>
     </form>

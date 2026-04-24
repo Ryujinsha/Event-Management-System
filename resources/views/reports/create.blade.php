@@ -2,14 +2,8 @@
 @section('title', 'Create Report')
 
 @section('content')
-<div style="margin-bottom:1.5rem;">
-    <a href="{{ route('events.show', $event) }}" class="link"><i class="fas fa-arrow-left"></i> Back to {{ $event->title }}</a>
-</div>
 
-<div class="card" style="max-width:720px;">
-    <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-file-alt" style="color:var(--primary-400);margin-right:0.5rem;"></i> Create Report</h3>
-    </div>
+<div class="card">
     <div class="card-body">
         <div class="detail-grid mb-3">
             <div class="detail-item">
@@ -44,7 +38,10 @@
                 <label class="form-label">Summary (optional)</label>
                 <textarea name="summary" class="form-input" rows="3" placeholder="Brief summary...">{{ old('summary') }}</textarea>
             </div>
-            <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-save"></i> Save Report</button>
+            <div class="action-group mt-3" style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+                <a href="{{ route('events.show', $event) }}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-save"></i> Save Report</button>
+            </div>
         </form>
     </div>
 </div>

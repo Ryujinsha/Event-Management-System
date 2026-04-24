@@ -24,6 +24,7 @@ class User extends Authenticatable
         'department',
         'organization',
         'is_active',
+        'signature',
     ];
 
     protected $hidden = [

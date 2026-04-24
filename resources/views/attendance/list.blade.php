@@ -2,13 +2,10 @@
 @section('title', 'Attendance List')
 
 @section('content')
-<div style="margin-bottom:1.5rem;">
-    <a href="{{ route('events.show', $event) }}" class="link"><i class="fas fa-arrow-left"></i> Back to {{ $event->title }}</a>
-</div>
 
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-list-check" style="color:var(--primary-400);margin-right:0.5rem;"></i> Attendance — {{ $event->title }}</h3>
+        <h3 class="card-title"></h3>
         <span class="badge-status badge-{{ $event->status }}">{{ $attendances->count() }} checked in</span>
     </div>
     <div class="table-container">
@@ -30,6 +27,11 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+    <div class="card-body">
+        <div class="action-group mt-3" style="display: flex; justify-content: flex-end;">
+            <a href="{{ route('events.show', $event) }}" class="btn btn-secondary">Cancel</a>
+        </div>
     </div>
 </div>
 @endsection

@@ -2,10 +2,6 @@
 @section('title', 'Audit Logs')
 
 @section('content')
-<div class="section-header">
-    <h3 class="section-title">System Audit Logs</h3>
-</div>
-
 <div class="card">
     <div class="table-container">
         <table class="table">

@@ -10,10 +10,10 @@
             </div>
             <h2 style="font-size:1.375rem;font-weight:700;color:#6ee7b7;margin-bottom:0.5rem;">Check-In Successful!</h2>
         @else
-            <div style="width:80px;height:80px;background:var(--gradient-danger);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-bottom:1.5rem;">
+            <div style="width:80px;height:80px;background:#980517;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-bottom:1.5rem;">
                 <i class="fas fa-times" style="font-size:2rem;color:white;"></i>
             </div>
-            <h2 style="font-size:1.375rem;font-weight:700;color:#fca5a5;margin-bottom:0.5rem;">Check-In Failed</h2>
+            <h2 style="font-size:1.375rem;font-weight:700;color:#980517;margin-bottom:0.5rem;">Check-In Failed</h2>
         @endif
 
         <p style="color:var(--text-muted);margin-bottom:1.5rem;">{{ $message }}</p>

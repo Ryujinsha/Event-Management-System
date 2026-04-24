@@ -2,21 +2,19 @@
 @section('title', 'Manage Certificates')
 
 @section('content')
-<div style="margin-bottom:1.5rem;">
-    <a href="{{ route('events.show', $event) }}" class="link"><i class="fas fa-arrow-left"></i> Back to {{ $event->title }}</a>
-</div>
 
 <div class="card mb-3">
-    <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-award" style="color:var(--primary-400);margin-right:0.5rem;"></i> Certificates — {{ $event->title }}</h3>
-        <form method="POST" action="{{ route('certificates.activate', $event) }}">
-            @csrf
-            <button type="submit" class="btn btn-primary" onclick="return confirm('This will generate certificates for all accepted participants. Continue?')">
-                <i class="fas fa-certificate"></i> Activate Certificates
-            </button>
-        </form>
-    </div>
     <div class="card-body">
+        @if(!$event->certificate_template || !$event->lecturer_id || !$event->organizer_signature)
+            <div class="alert alert-warning" style="margin-bottom:1.5rem;">
+                <i class="fas fa-exclamation-triangle"></i> Certificate design is not configured yet. Please design the certificate before activating.
+            </div>
+        @else
+            <div class="alert alert-info" style="margin-bottom:1.5rem;">
+                <i class="fas fa-check-circle"></i> Certificate design is ready. You can now activate certificates.
+            </div>
+        @endif
+
         <p style="color:var(--text-muted);margin-bottom:1rem;">
             <strong>{{ $acceptedParticipants->count() }}</strong> accepted participants •
             <strong>{{ $certificates->count() }}</strong> certificates issued
@@ -41,6 +39,20 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+    <div class="card-body">
+        <div class="action-group mt-3" style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+            <a href="{{ route('events.show', $event) }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('certificates.design', $event) }}" class="btn btn-outline">
+                <i class="fas fa-palette"></i> Design Certificate
+            </a>
+            <form method="POST" action="{{ route('certificates.activate', $event) }}" style="margin:0;">
+                @csrf
+                <button type="submit" class="btn btn-primary" onclick="return confirm('This will generate certificates for all accepted participants. Continue?')">
+                    <i class="fas fa-certificate"></i> Activate Certificates
+                </button>
+            </form>
+        </div>
     </div>
 </div>
 @endsection

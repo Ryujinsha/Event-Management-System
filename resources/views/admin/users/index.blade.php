@@ -2,12 +2,11 @@
 @section('title', 'Manage Users')
 
 @section('content')
-<div class="section-header">
-    <h3 class="section-title">All Users</h3>
-    <a href="{{ route('admin.users.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Create User</a>
-</div>
-
 <div class="card">
+    <div class="card-header">
+        <div></div>
+        <a href="{{ route('admin.users.create') }}" class="btn btn-primary btn-sm">Create User</a>
+    </div>
     <div class="table-container">
         <table class="table">
             <thead>
@@ -42,7 +41,7 @@
                             <form action="{{ route('admin.users.toggleStatus', $user) }}" method="POST">
                                 @csrf
                                 @method('PATCH')
-                                <button type="submit" class="btn {{ $user->is_active ? 'btn-danger' : 'btn-success' }} btn-sm" title="{{ $user->is_active ? 'Deactivate' : 'Activate' }}">
+                                <button type="submit" class="btn btn-sm" style="background:{{ $user->is_active ? '#473f3d' : 'var(--success-500)' }};color:white;border:none;" title="{{ $user->is_active ? 'Deactivate' : 'Activate' }}">
                                     <i class="fas {{ $user->is_active ? 'fa-user-slash' : 'fa-user-check' }}"></i>
                                 </button>
                             </form>

@@ -2,14 +2,8 @@
 @section('title', 'Generate QR Code')
 
 @section('content')
-<div style="margin-bottom:1.5rem;">
-    <a href="{{ route('events.show', $event) }}" class="link"><i class="fas fa-arrow-left"></i> Back to {{ $event->title }}</a>
-</div>
 
-<div class="card" style="max-width:600px;">
-    <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-qrcode" style="color:var(--primary-400);margin-right:0.5rem;"></i> QR Attendance</h3>
-    </div>
+<div class="card">
     <div class="card-body">
         @if(session('qr_generated'))
             <div class="qr-display">
@@ -28,6 +22,8 @@
                 <div style="margin-top:1rem;padding:1rem;background:var(--bg-input);border-radius:var(--radius-sm);border:1px solid var(--border-color);">
                     <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:0.375rem;">Manual Check-in URL</div>
                     <code style="font-size:0.75rem;color:var(--primary-400);word-break:break-all;">{{ session('qr_url') }}</code>
+                <div class="action-group mt-3" style="display: flex; justify-content: flex-end;">
+                    <a href="{{ route('events.show', $event) }}" class="btn btn-secondary">Back to Event</a>
                 </div>
             </div>
         @else
@@ -38,7 +34,10 @@
                     <input type="number" name="duration" class="form-input" value="60" min="5" max="480" required>
                     <p style="font-size:0.8125rem;color:var(--text-muted);margin-top:0.375rem;">QR code will expire after this duration</p>
                 </div>
-                <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-qrcode"></i> Generate QR Code</button>
+                <div class="action-group mt-3" style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+                    <a href="{{ route('events.show', $event) }}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-qrcode"></i> Generate QR Code</button>
+                </div>
             </form>
 
             @if($event->isQrValid())

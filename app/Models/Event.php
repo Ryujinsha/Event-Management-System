@@ -12,6 +12,8 @@ class Event extends Model
         'title', 'description', 'start_date', 'end_date',
         'location', 'quota', 'status', 'created_by',
         'qr_code', 'qr_token', 'qr_expires_at',
+        'certificate_template', 'lecturer_id', 'organizer_signature',
+        'event_logo',
     ];
 
     protected function casts(): array
@@ -21,6 +23,11 @@ class Event extends Model
             'end_date' => 'datetime',
             'qr_expires_at' => 'datetime',
         ];
+    }
+
+    public function lecturer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'lecturer_id');
     }
 
     public function creator(): BelongsTo

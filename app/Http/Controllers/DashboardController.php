@@ -7,9 +7,35 @@ use App\Models\User;
 use App\Models\Participant;
 use App\Models\Certificate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
+    public function signatureForm()
+    {
+        $user = auth()->user();
+        if (!$user->isLecturer() && !$user->isAdmin()) {
+            abort(403);
+        }
+        return view('profile.signature');
+    }
+
+    public function saveSignature(Request $request)
+    {
+        $user = auth()->user();
+        if (!$user->isLecturer() && !$user->isAdmin()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'signature' => 'required|string',
+        ]);
+
+        $user->update(['signature' => $request->signature]);
+
+        return back()->with('success', 'Signature saved successfully!');
+    }
+
     public function index()
     {
         $user = auth()->user();

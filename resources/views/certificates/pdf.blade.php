@@ -1,76 +1,233 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8">
-<title>Certificate — {{ $certificate->certificate_number }}</title>
-<style>
-    @page { margin: 0; }
-    body { margin: 0; padding: 0; font-family: 'DejaVu Sans', Georgia, serif; background: white; }
-    .certificate {
-        width: 100%; height: 100%;
-        background: linear-gradient(135deg, #f0f0ff 0%, #e8e0ff 50%, #f0f0ff 100%);
-        position: relative; padding: 60px 80px;
-        box-sizing: border-box;
-    }
-    .border-frame {
-        border: 3px solid #4f46e5; padding: 40px 50px;
-        height: calc(100% - 120px); box-sizing: border-box;
-        position: relative;
-    }
-    .corner { position: absolute; width: 30px; height: 30px; border-color: #7c3aed; }
-    .corner-tl { top: -3px; left: -3px; border-top: 5px solid; border-left: 5px solid; }
-    .corner-tr { top: -3px; right: -3px; border-top: 5px solid; border-right: 5px solid; }
-    .corner-bl { bottom: -3px; left: -3px; border-bottom: 5px solid; border-left: 5px solid; }
-    .corner-br { bottom: -3px; right: -3px; border-bottom: 5px solid; border-right: 5px solid; }
-    .content { text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center; }
-    .icon { font-size: 50px; color: #4f46e5; margin-bottom: 10px; }
-    .title { font-size: 36px; color: #4f46e5; font-weight: bold; letter-spacing: 6px; text-transform: uppercase; margin-bottom: 5px; }
-    .subtitle { font-size: 14px; color: #666; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 30px; }
-    .presented { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 2px; }
-    .name { font-size: 28px; color: #1a1a3e; font-weight: bold; margin: 10px 0; border-bottom: 2px solid #4f46e5; display: inline-block; padding-bottom: 5px; }
-    .desc { font-size: 13px; color: #555; line-height: 1.8; margin: 15px auto; max-width: 80%; }
-    .event-name { font-size: 16px; color: #4f46e5; font-weight: bold; margin: 10px 0; }
-    .date { font-size: 11px; color: #888; margin-top: 15px; }
-    .cert-number { font-size: 10px; color: #aaa; position: absolute; bottom: 15px; right: 20px; }
-    .footer-line { width: 150px; border-top: 1px solid #333; margin: 25px auto 5px; }
-    .signature-text { font-size: 11px; color: #666; }
-</style>
-</head><body>
-<div class="certificate">
-    <div class="border-frame">
-        <div class="corner corner-tl"></div>
-        <div class="corner corner-tr"></div>
-        <div class="corner corner-bl"></div>
-        <div class="corner corner-br"></div>
-        <div style="position: absolute; top: 30px; left: 40px; color: #4f46e5; font-weight: bold; font-size: 20px;">[HORIZON LOGO]</div>
-        <div style="position: absolute; top: 30px; right: 40px; color: #4f46e5; font-weight: bold; font-size: 20px;">[EVENT LOGO]</div>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Certificate</title>
+    <style>
+        @font-face {
+            font-family: 'Alex Brush';
+            src: url('{{ storage_path("fonts/AlexBrush-Regular.ttf") }}') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @page {
+            margin: 0;
+            size: A4 landscape;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            color: #000;
+            line-height: 1;
+        }
+        .container {
+            position: relative;
+            width: 1122px;
+            height: 792px;
+            overflow: hidden;
+        }
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Logos - Enlarged and Parallel */
+        .campus-logo {
+            position: absolute;
+            top: 40px;
+            left: 50px;
+            max-height: 100px; /* Enlarged */
+            max-width: 180px;
+            object-fit: contain;
+        }
+        .event-logo {
+            position: absolute;
+            top: 40px;
+            right: 50px;
+            max-height: 100px; /* Enlarged */
+            max-width: 180px;
+            object-fit: contain;
+        }
+
+        .content {
+            text-align: center;
+            padding-top: 120px;
+        }
+        .header {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 72px;
+            font-weight: bold;
+            margin-bottom: 0px;
+            text-transform: uppercase;
+        }
+        .sub-header {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 28px;
+            margin-top: -5px;
+            margin-bottom: 40px;
+            font-weight: bold;
+        }
+        .presented-to {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 18px; 
+            color: #444;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .participant-name-wrapper {
+            display: inline-block;
+            margin-bottom: 25px;
+        }
+        .participant-name {
+            font-size: 110px;
+            font-family: 'Alex Brush', cursive !important;
+            color: #980517;
+            margin-bottom: 2px;
+            padding: 0 40px;
+        }
+        .name-line {
+            height: 1.5px;
+            background: #000;
+            width: 100%;
+        }
+        .description {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 20px;
+            color: #222;
+            line-height: 1.5;
+            width: 80%;
+            margin: 0 auto;
+        }
+        .event-name {
+            font-weight: bold;
+            font-size: 24px;
+            color: #000;
+        }
+        
+        .signatures-container {
+            position: absolute;
+            bottom: 60px;
+            width: 100%;
+        }
+        .signature-table {
+            width: 85%;
+            margin: 0 auto;
+        }
+        .signature-cell {
+            width: 50%;
+            text-align: center;
+            vertical-align: bottom;
+        }
+        .signature-label {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #444;
+        }
+        .signature-image-wrapper {
+            height: 80px;
+            margin-bottom: 2px;
+        }
+        .signature-img {
+            max-height: 80px;
+        }
+        .signature-line {
+            width: 240px;
+            border-top: 1.5px solid #000;
+            margin: 0 auto 5px;
+        }
+        .signer-name {
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: 15px;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    @php
+        function getBase64Image($path) {
+            if (file_exists($path)) {
+                $type = pathinfo($path, PATHINFO_EXTENSION);
+                $data = file_get_contents($path);
+                return 'data:image/' . $type . ';base64,' . base64_encode($data);
+            }
+            return null;
+        }
+        $campusLogo = getBase64Image(public_path('assets/logo_kampus.png'));
+        $eventLogo = null;
+        if ($certificate->event->event_logo) {
+            $eventLogo = getBase64Image(public_path('assets/' . $certificate->event->event_logo));
+        }
+    @endphp
+
+    <div class="container">
+        <!-- Background -->
+        <img class="background" src="{{ public_path('assets/certificates/' . $certificate->event->certificate_template) }}" alt="Background">
+
+        <!-- Logos as Base64 -->
+        @if($campusLogo)
+            <img class="campus-logo" src="{{ $campusLogo }}" alt="Campus Logo">
+        @endif
+
+        @if($eventLogo)
+            <img class="event-logo" src="{{ $eventLogo }}" alt="Event Logo">
+        @endif
 
         <div class="content">
-            <div class="title">Certificate</div>
-            <div class="subtitle">of Completion</div>
-
-            <div class="presented">This is proudly presented to</div>
-            <div class="name">{{ $certificate->user->name }}</div>
-
-            <div class="desc">
-                For successfully completing the event program
+            <div class="header">CERTIFICATE</div>
+            <div class="sub-header">OF PARTICIPATION</div>
+            
+            <div class="presented-to">THIS CERTIFICATE IS PROUDLY PRESENTED TO</div>
+            
+            <div class="participant-name-wrapper">
+                <div class="participant-name">{{ $certificate->user->name }}</div>
+                <div class="name-line"></div>
             </div>
-
-            <div class="event-name">"{{ $certificate->event->title }}"</div>
-
-            <div class="desc">
-                Held at {{ $certificate->event->location }}<br>
-                Date: {{ $certificate->event->start_date->format('d F Y') }} — {{ $certificate->event->end_date->format('d F Y') }}
-            </div>
-
-            <div style="margin-top: 40px;">
-                <div class="footer-line"></div>
-                <div class="signature-text">
-                    Organizer: {{ $certificate->event->creator->name ?? 'Head of Committee' }}<br>
-                    Event Management System
-                </div>
+            
+            <div class="description">
+                For their active participation and successful completion of the <br>
+                <span class="event-name">{{ $certificate->event->title }}</span><br>
+                held on {{ $certificate->event->start_date->format('d F Y') }} at {{ $certificate->event->location }}.
             </div>
         </div>
 
-        <div class="cert-number">{{ $certificate->certificate_number }}</div>
+        <div class="signatures-container">
+            <table class="signature-table">
+                <tr>
+                    <td class="signature-cell">
+                        <div class="signature-label">Head of Department</div>
+                        <div class="signature-image-wrapper">
+                            @if($certificate->event->lecturer && $certificate->event->lecturer->signature)
+                                <img class="signature-img" src="{{ $certificate->event->lecturer->signature }}">
+                            @endif
+                        </div>
+                        <div class="signature-line"></div>
+                        <div class="signer-name">{{ $certificate->event->lecturer->name ?? 'Lecturer Name' }}</div>
+                    </td>
+                    <td class="signature-cell">
+                        <div class="signature-label">General Manager</div>
+                        <div class="signature-image-wrapper">
+                            @if($certificate->event->organizer_signature)
+                                <img class="signature-img" src="{{ $certificate->event->organizer_signature }}">
+                            @endif
+                        </div>
+                        <div class="signature-line"></div>
+                        <div class="signer-name">{{ $certificate->event->creator->name ?? 'Organizer Name' }}</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
-</div>
-</body></html>
+</body>
+</html>

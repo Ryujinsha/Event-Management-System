@@ -4,7 +4,7 @@
 @section('content')
 <div class="card" style="max-width:500px;margin:0 auto;text-align:center;">
     <div class="card-body" style="padding:2rem;">
-        <div style="font-size:3rem;margin-bottom:1rem;color:var(--primary-400);">
+        <div style="font-size:3rem;margin-bottom:1rem;color:#980517;">
             <i class="fas fa-clipboard-check"></i>
         </div>
         <h2 style="font-size:1.375rem;font-weight:700;margin-bottom:0.5rem;">Confirm Check-In</h2>
@@ -21,7 +21,7 @@
         <form method="POST" action="{{ route('attendance.checkin') }}">
             @csrf
             <input type="hidden" name="token" value="{{ $token }}">
-            <button type="submit" class="btn btn-success btn-lg btn-block">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">
                 <i class="fas fa-check"></i> Confirm Check-In
             </button>
         </form>

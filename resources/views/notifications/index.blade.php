@@ -2,17 +2,17 @@
 @section('title', 'Notifications')
 
 @section('content')
-<div class="section-header">
-    <h3 class="section-title">Notifications</h3>
-    @if($notifications->count())
-    <form method="POST" action="{{ route('notifications.markAllAsRead') }}">
-        @csrf
-        <button type="submit" class="btn btn-outline btn-sm"><i class="fas fa-check-double"></i> Mark All Read</button>
-    </form>
-    @endif
-</div>
-
 <div class="card">
+    @if($notifications->count())
+    <div class="card-header">
+        <div></div>
+        <form method="POST" action="{{ route('notifications.markAllAsRead') }}">
+            @csrf
+            <button type="submit" class="btn btn-primary btn-sm">Mark All Read</button>
+        </form>
+    </div>
+    @endif
+    <div class="card-body" style="padding:0;">
     @forelse($notifications as $notification)
     <div class="notification-item {{ !$notification->is_read ? 'unread' : '' }}">
         <div class="notification-icon {{ $notification->type }}">
@@ -44,5 +44,6 @@
     @endforelse
 </div>
 
-<div class="pagination-wrapper">{{ $notifications->links() }}</div>
+<div class="pagination-wrapper">{{ $notifications->links() }}    </div>
+</div>
 @endsection

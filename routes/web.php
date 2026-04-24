@@ -70,6 +70,8 @@ Route::middleware(['auth'])->group(function () {
 
         // Certificates management
         Route::get('/events/{event}/certificates', [CertificateController::class, 'manage'])->name('certificates.manage');
+        Route::get('/events/{event}/certificates/design', [CertificateController::class, 'design'])->name('certificates.design');
+        Route::post('/events/{event}/certificates/design', [CertificateController::class, 'saveDesign'])->name('certificates.saveDesign');
         Route::post('/events/{event}/certificates/activate', [CertificateController::class, 'activate'])->name('certificates.activate');
     });
 
@@ -99,4 +101,8 @@ Route::middleware(['auth'])->group(function () {
 
     // History
     Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
+
+    // Lecturer Signature
+    Route::get('/profile/signature', [DashboardController::class, 'signatureForm'])->name('profile.signature');
+    Route::post('/profile/signature', [DashboardController::class, 'saveSignature'])->name('profile.signature.save');
 });

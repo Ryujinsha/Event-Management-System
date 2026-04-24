@@ -2,10 +2,6 @@
 @section('title', 'My Certificates')
 
 @section('content')
-<div class="section-header">
-    <h3 class="section-title">My Certificates</h3>
-</div>
-
 @if($certificates->count())
 <div class="event-grid">
     @foreach($certificates as $cert)

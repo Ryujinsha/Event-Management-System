@@ -11,7 +11,7 @@
         </div>
     </div>
     <div class="stat-card">
-        <div class="stat-icon green"><i class="fas fa-award"></i></div>
+        <div class="stat-icon red"><i class="fas fa-award"></i></div>
         <div class="stat-info">
             <div class="stat-value">{{ $certificatesCount }}</div>
             <div class="stat-label">Certificates Earned</div>
@@ -22,7 +22,7 @@
 <!-- Upcoming Events -->
 <div class="card mb-3">
     <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-calendar-alt" style="color:var(--primary-400);margin-right:0.5rem;"></i> Available Events</h3>
+        <h3 class="card-title"><i class="fas fa-calendar-alt" style="color:#000000;margin-right:0.5rem;"></i> Available Events</h3>
         <a href="{{ route('events.index') }}" class="btn btn-sm btn-outline">Browse All</a>
     </div>
     <div class="card-body">
@@ -53,7 +53,7 @@
 <!-- My Recent Participants -->
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-clipboard-list" style="color:var(--primary-400);margin-right:0.5rem;"></i> My Participants</h3>
+        <h3 class="card-title"><i class="fas fa-clipboard-list" style="color:#000000;margin-right:0.5rem;"></i> My Participants</h3>
         <a href="{{ route('participants.my') }}" class="btn btn-sm btn-outline">View All</a>
     </div>
     <div class="card-body">

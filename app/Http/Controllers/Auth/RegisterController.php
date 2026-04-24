@@ -11,7 +11,7 @@ use Illuminate\Validation\Rules\Password;
 
 class RegisterController extends Controller
 {
-    public function showParticipantForm()
+    public function showRegistrationForm()
     {
         return view('auth.register');
     }

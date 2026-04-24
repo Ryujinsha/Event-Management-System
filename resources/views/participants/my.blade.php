@@ -2,13 +2,9 @@
 @section('title', 'My Participants')
 
 @section('content')
-<div class="section-header">
-    <h3 class="section-title">My Participants</h3>
-</div>
-
-<div class="card">
+<div class="card" style="background:#FFFFFF;">
     <div class="table-container">
-        <table class="table">
+        <table class="table" style="background:#FFFFFF; font-size:1.0625rem;">
             <thead>
                 <tr><th>Event</th><th>Reg Number</th><th>Date</th><th>Event Date</th><th>Status</th></tr>
             </thead>
@@ -32,7 +28,7 @@
                             <i class="fas fa-clipboard"></i>
                             <h3>No participants yet</h3>
                             <p>Browse available events to register</p>
-                            <a href="{{ route('events.index') }}" class="btn btn-primary mt-2"><i class="fas fa-search"></i> Browse Events</a>
+                             <a href="{{ route('events.index') }}" class="btn btn-primary mt-2">Browse Events</a>
                         </div>
                     </td>
                 </tr>

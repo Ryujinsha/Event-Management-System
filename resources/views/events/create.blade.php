@@ -2,14 +2,7 @@
 @section('title', 'Create Event')
 
 @section('content')
-<div style="margin-bottom:1.5rem;">
-    <a href="{{ route('events.index') }}" class="link"><i class="fas fa-arrow-left"></i> Back to events</a>
-</div>
-
-<div class="card" style="max-width:720px;">
-    <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-plus-circle" style="color:var(--primary-400);margin-right:0.5rem;"></i> Create New Event</h3>
-    </div>
+<div class="card">
     <div class="card-body">
         <form method="POST" action="{{ route('events.store') }}">
             @csrf
@@ -65,9 +58,8 @@
                 </div>
             </div>
 
-            <div class="action-group mt-2">
-                <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-save"></i> Create Event</button>
-                <a href="{{ route('events.index') }}" class="btn btn-outline">Cancel</a>
+            <div class="action-group mt-2" style="justify-content:flex-end;">
+                <button type="submit" class="btn btn-primary btn-lg">Create Event</button>
             </div>
         </form>
     </div>

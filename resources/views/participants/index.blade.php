@@ -2,30 +2,28 @@
 @section('title', 'Manage Participants')
 
 @section('content')
-<div class="section-header">
-    <h3 class="section-title">Manage Participants</h3>
-</div>
-
-<div class="filter-bar">
-    <form method="GET" action="{{ route('participants.index') }}" style="display:flex;gap:0.75rem;flex-wrap:wrap;">
-        <select name="event_id" class="form-input" style="max-width:300px;" onchange="this.form.submit()">
-            <option value="">All Events</option>
-            @foreach($events as $t)
-            <option value="{{ $t->id }}" {{ request('event_id') == $t->id ? 'selected' : '' }}>{{ $t->title }}</option>
-            @endforeach
-        </select>
-        <select name="status" class="form-input" style="max-width:180px;" onchange="this.form.submit()">
-            <option value="">All Status</option>
-            @foreach(['pending','accepted','rejected'] as $s)
-            <option value="{{ $s }}" {{ request('status') === $s ? 'selected' : '' }}>{{ ucfirst($s) }}</option>
-            @endforeach
-        </select>
-    </form>
-</div>
-
 <div class="card">
-    <div class="table-container">
-        <table class="table">
+    <div class="card-body">
+        <form method="GET" action="{{ route('participants.index') }}" style="display:flex; flex-direction:row; gap:0.75rem; align-items:center; margin-bottom: 1.25rem;">
+            <div style="width: 280px;">
+                <select name="event_id" class="form-input" style="width:100%;" onchange="this.form.submit()">
+                    <option value="">All Events</option>
+                    @foreach($events as $t)
+                    <option value="{{ $t->id }}" {{ request('event_id') == $t->id ? 'selected' : '' }}>{{ $t->title }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div style="width: 160px;">
+                <select name="status" class="form-input" style="width:100%;" onchange="this.form.submit()">
+                    <option value="">All Status</option>
+                    @foreach(['pending','accepted','rejected'] as $s)
+                    <option value="{{ $s }}" {{ request('status') === $s ? 'selected' : '' }}>{{ ucfirst($s) }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </form>
+        <div class="table-container" style="border-top: 1px solid var(--border-color); padding-top: 0.75rem;">
+            <table class="table">
             <thead>
                 <tr><th>Student</th><th>Event</th><th>Reg Number</th><th>Date</th><th>Status</th><th>Actions</th></tr>
             </thead>
@@ -67,5 +65,6 @@
     </div>
 </div>
 
-<div class="pagination-wrapper">{{ $participants->withQueryString()->links() }}</div>
+<div class="pagination-wrapper">{{ $participants->withQueryString()->links() }}    </div>
+</div>
 @endsection

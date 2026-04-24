@@ -45,18 +45,18 @@ class ParticipantController extends Controller
         }
 
         // Check event status
-        if ($event->status !== 'published') {
-            return back()->with('error', 'This event is not open for participant.');
+        if (!in_array($event->status, ['approved', 'published'])) {
+            return back()->with('error', 'This event is not open for registration.');
         }
 
         $participant = Participant::create([
-            'participant_number' => Participant::generateParticipantNumber(),
+            'registration_number' => Participant::generateRegistrationNumber(),
             'user_id' => $user->id,
             'event_id' => $event->id,
-            'status' => 'pending',
+            'status' => 'accepted',
         ]);
 
-        return back()->with('success', "Participant successful! Your participant number is: {$participant->participant_number}");
+        return back()->with('success', "You have successfully joined the event! Your registration number is: {$participant->registration_number}");
     }
 
     public function updateStatus(Request $request, Participant $participant)

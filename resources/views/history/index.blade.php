@@ -2,10 +2,6 @@
 @section('title', 'Event History')
 
 @section('content')
-<div class="section-header">
-    <h3 class="section-title">Event History</h3>
-</div>
-
 @forelse($participants as $reg)
 <div class="card mb-2" style="display:flex;flex-direction:row;align-items:center;gap:1.5rem;padding:1.25rem 1.5rem;">
     <div style="width:48px;height:48px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;flex-shrink:0;
@@ -54,7 +50,7 @@
         <i class="fas fa-history"></i>
         <h3>No event history</h3>
         <p>Your completed events will appear here</p>
-        <a href="{{ route('events.index') }}" class="btn btn-primary mt-2"><i class="fas fa-search"></i> Browse Events</a>
+        <a href="{{ route('events.index') }}" class="btn btn-primary mt-2">Browse Events</a>
     </div>
 </div>
 @endforelse

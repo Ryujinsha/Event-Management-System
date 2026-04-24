@@ -2,9 +2,6 @@
 @section('title', $event->title)
 
 @section('content')
-<div style="margin-bottom:1.5rem;">
-    <a href="{{ route('events.index') }}" class="link"><i class="fas fa-arrow-left"></i> Back to events</a>
-</div>
 
 <div class="card mb-3">
     <div class="card-header">
@@ -61,31 +58,31 @@
         @endif
 
         <!-- Actions -->
-        <div class="action-group">
-            @if(auth()->user()->isStudent() && $event->status === 'published')
+        <div class="action-group" style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+            @if(auth()->user()->isStudent() && in_array($event->status, ['approved', 'published']))
                 @if($userParticipant)
                     <div class="alert alert-info" style="margin:0;">
                         <i class="fas fa-info-circle"></i>
-                        You are already registered. Status: <strong>{{ ucfirst($userParticipant->status) }}</strong>
-                        &mdash; Reg #{{ $userParticipant->registration_number }}
+                        You have joined this event. Registration #{{ $userParticipant->registration_number }}
                     </div>
                 @else
                     <form method="POST" action="{{ route('participants.store', $event) }}">
                         @csrf
                         <button type="submit" class="btn btn-primary btn-lg" {{ $event->isFull() ? 'disabled' : '' }}>
-                            <i class="fas fa-clipboard-check"></i> {{ $event->isFull() ? 'Event Full' : 'Register Now' }}
+                            <i class="fas fa-sign-in-alt"></i> {{ $event->isFull() ? 'Event Full' : 'Join Event' }}
                         </button>
                     </form>
                 @endif
             @endif
 
             @if(auth()->user()->isAdmin() || (auth()->user()->isCommittee() && $event->created_by === auth()->id()))
+                <a href="{{ route('events.index') }}" class="btn btn-secondary"><i class="fas fa-times"></i> Cancel</a>
                 <a href="{{ route('events.edit', $event) }}" class="btn btn-outline"><i class="fas fa-edit"></i> Edit</a>
                 <a href="{{ route('attendance.generate', $event) }}" class="btn btn-outline"><i class="fas fa-qrcode"></i> QR Attendance</a>
                 <a href="{{ route('attendance.list', $event) }}" class="btn btn-outline"><i class="fas fa-list-check"></i> Attendance List</a>
                 <a href="{{ route('reports.create', $event) }}" class="btn btn-outline"><i class="fas fa-file-alt"></i> Create Report</a>
                 <a href="{{ route('certificates.manage', $event) }}" class="btn btn-outline"><i class="fas fa-award"></i> Certificates</a>
-            @endif
+@endif
 
             @if(auth()->user()->isHeadDepartment() && $event->status === 'pending_approval')
                 <form method="POST" action="#" style="display:inline-block;">

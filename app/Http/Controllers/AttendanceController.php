@@ -25,7 +25,7 @@ class AttendanceController extends Controller
         $token = Str::random(32);
         $event->update([
             'qr_token' => $token,
-            'qr_expires_at' => now()->addMinutes($request->duration),
+            'qr_expires_at' => now()->addMinutes((int) $request->duration),
         ]);
 
         $qrUrl = route('attendance.checkin.form', ['token' => $token]);

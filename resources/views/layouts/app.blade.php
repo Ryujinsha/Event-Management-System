@@ -10,6 +10,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        * {
+            transition: none !important;
+            animation: none !important;
+            scroll-behavior: auto !important;
+        }
+        [x-cloak] { display: none !important; }
+    </style>
     @stack('styles')
 </head>
 <body x-data="{ sidebarOpen: window.innerWidth > 1024 }" class="app-body">
@@ -31,7 +39,7 @@
                 <span>Dashboard</span>
             </a>
 
-            <a href="{{ route('events.index') }}" class="nav-link {{ request()->routeIs('events.*') ? 'active' : '' }}">
+            <a href="{{ route('events.index') }}" class="nav-link {{ request()->routeIs('events.index') ? 'active' : '' }}">
                 <i class="fas fa-chalkboard-teacher"></i>
                 <span>Events</span>
             </a>
@@ -80,6 +88,10 @@
             @endif
 
             @if(auth()->user()->isLecturer())
+                <a href="{{ route('profile.signature') }}" class="nav-link {{ request()->routeIs('profile.signature') ? 'active' : '' }}">
+                    <i class="fas fa-pen-nib"></i>
+                    <span>My Signature</span>
+                </a>
                 <a href="{{ route('history.index') }}" class="nav-link {{ request()->routeIs('history.*') ? 'active' : '' }}">
                     <i class="fas fa-history"></i>
                     <span>History</span>
@@ -123,15 +135,12 @@
         <!-- Top Bar -->
         <header class="topbar">
             <div class="topbar-left">
-                <button class="menu-toggle" @click="sidebarOpen = !sidebarOpen">
-                    <i class="fas fa-bars"></i>
-                </button>
                 <h2 class="page-title">@yield('title', 'Dashboard')</h2>
             </div>
             <div class="topbar-right">
                 <a href="{{ route('notifications.index') }}" class="topbar-icon" x-data="notificationBell()" x-init="fetchCount()">
                     <i class="fas fa-bell"></i>
-                    <span class="notification-badge" x-show="count > 0" x-text="count"></span>
+                    <span class="notification-badge" x-show="count > 0" x-text="count" x-cloak></span>
                 </a>
                 <div class="topbar-user">
                     <span>{{ auth()->user()->name }}</span>
