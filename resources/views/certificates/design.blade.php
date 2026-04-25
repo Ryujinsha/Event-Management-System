@@ -3,9 +3,7 @@
 
 @section('content')
 <div class="card">
-    <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-palette" style="color:var(--primary-400);margin-right:0.5rem;"></i> Certificate Design</h3>
-    </div>
+
     <div class="card-body">
         <form id="design-form" method="POST" action="{{ route('certificates.saveDesign', $event) }}" enctype="multipart/form-data">
             @csrf
@@ -51,7 +49,7 @@
                     @if($event->event_logo)
                         <div style="margin-top:0.5rem;">
                             <img src="{{ asset('assets/' . $event->event_logo) }}" style="max-height:50px; border:1px solid var(--border-color); padding:2px;">
-                            <span style="font-size:0.75rem;color:var(--text-muted);">Current Logo</span>
+
                         </div>
                     @endif
                 </div>
@@ -105,12 +103,12 @@
         padding: 0.375rem 0.75rem;
         cursor: pointer;
         font-weight: 600;
-        color: var(--text-muted);
+        color: #980517;
         font-size: 0.875rem;
     }
     .tab-btn.active {
-        color: var(--primary-400);
-        border-bottom: 2px solid var(--primary-400);
+        color: #980517;
+        border-bottom: 2px solid #980517;
     }
 </style>
 
